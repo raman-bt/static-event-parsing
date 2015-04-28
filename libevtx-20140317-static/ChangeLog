@@ -1,0 +1,451 @@
+TODO
+* evtxexport: add add support for .mui files in the same directory
+* add clean IO handle function
+* msvscpp:
+  - check and fix debug output generation
+* mark file as corrupted on CRC mismatch ?
+* check signal abort
+* parse binary data from EventData
+* event message file ?
+  - correctly deal with \\ in C:\Program Files\Common Files\McAfee\SystemCore\\naievent.dll
+* improve detecting corrupted recovered event records
+* improve dealing with corrupted event records?
+* formatted output
+  - check with test data if output is now correct
+* wevt
+  - improve (template) codepage handling
+  - improve template definition XML template value handling
+* message handle:
+  - create: message string object
+  - get %WinDir% from registry
+* resource file
+  - cache message strings
+  - cache template providers
+  - cache template events
+  - cache template definitions
+* tests
+  - evtexport: handle "Provider identifier" in debug ouput
+
+* XML output change
+  - Keywords add no leading 0's
+    <Keywords>0x8080000000000000</Keywords>
+
+strings:
+  - support non-contiguous data elements ?
+
+libfwevt optimization:
+  - reference value while parsing?
+  - count number of data elements (strings) while parsing
+  - reference binary (data) while parsing
+
+* API
+  - get op code (0 => Info)
+  - task category (none if not set)
+  - keywords
+
+* recovery:
+  - pass what type of chunk is being read
+  - pass flag to binary xml parsing to ignore parsing errors ?
+    or make this the default behavior
+  - move read xml out of init record function ?
+* fix message filename retrieval, registry being read wrong ?
+* implement libevtx_xml_tag_get_attribute_by_utf8_path (and utf16 equivalent) ?
+* implement libevtx_xml_tag_get_element_by_utf8_path (and utf16 equivalent) ?
+* store name hash in value identifier
+* deal with corruption scenario
+* deal with trailing empty data ?
+* remove libevtx_libfguid.h once libfvalue wraps the format flags
+* evtxeport:
+  - non-xml export format use evtexport like approach (add functions to get
+    specific event data)
+* add recovery scan
+* add debug function for binary XML token types
+* codepage support
+* flag internally if the file is corrupted (CRC mismatch)
+
+Format:
+* what about empty binary xml data in the event record? does it only contain a 0x00 byte?
+
+Debug:
+* libfwevt: character reference print trailing data
+* handle empty XML document:
+  libevtx_record_values_read_xml_document: XML document:
+  libfwevt_xml_tag_debug_print: invalid XML tag.
+
+Recovery:
+* scan for records in chunk free space
+
+20140317
+* updated dependencies
+* worked on setup.py
+* worked on Python-bindings
+
+20140210
+* added evtxexport man page
+
+20140131
+* removed examples
+
+20140112
+* updated dependencies
+
+20140105
+* 2014 update
+
+20132111
+* small fix in evtxexport -h output
+* updated dependencies
+* worked on python bindings
+
+20131013
+* updated dependencies
+
+20131009
+* improved dpkg files
+
+20130929
+* worked on setup.py, largely for MSI builds
+
+20130923
+* updated dependencies
+
+20130909
+* updated dependencies
+* worked on libcthreads build support
+
+20130727
+* updated dependencies
+* pyevtx
+  - changed event identifier to an unsigned long
+  - fixes for >2G file objects in BFIO glue code
+
+20130718
+* updated dependencies
+* removed unnecessary restriction in library include headers
+
+20130713
+* worked on tests
+* improved reading from dirty files with an incorrect number of chunks
+
+20130712
+* fix for encoding special characters in XML output
+* code clean up
+* pyevtx small changes to docstrings
+* worked on tests
+* updated dependencies
+* added support for parsing ProcessingErrorData
+
+20130609
+* updated dependencies
+
+20120521
+* worked on improving corruption detection for recovered records
+
+20120421
+* worked on tests
+* updated dependencies
+* bug fixes in binary xml parsing
+
+20120418
+* fixed issue for uftf16 base16 string too small
+
+20120417
+* comparing the results of various builds
+
+20120414
+* textual changes
+* code clean up
+
+20120413
+* updated dependencies
+* fixed codepage 1255 restriction
+* worked on tests
+* updates and bug fixes in pyevtx
+* improvements to message string support
+
+20120329
+* bug fix for recent libfdata changes
+* updated dependencies
+
+20120319
+* updated dependencies
+* changes for libfdata update
+
+20130307
+* updated macosx files
+
+20130303
+* added PackageMaker files
+
+20130301
+* fixed bug in handling recovered records when no records are available
+
+20130226
+* worked on error tolerance
+* added debug output for file flags
+
+20130210
+* updated libcfile to allow reading from open files
+* fixed incorrect name of resulting evtxexport binary in msvscpp files
+
+20130209
+* small fix in the libcdirectory msvscpp files
+* updated dependencies
+* made record parsing more error resilient for Archived evtx files
+
+20130208
+* worked on formatted strings
+* added decimal representation to level
+
+20130207
+* worked on record parsing
+
+20130206
+* worked on record parsing
+* merged <Data Name="ExtraInfo">\n</Data> into <Data Name="ExtraInfo"/>
+  value consists of a single linefeed 0x0a
+
+20130205
+* library now parses records without template by default
+* worked on message string
+* message string now prints unused conversion specifiers
+
+20130113
+* updated msvscpp files
+* updated examples
+
+20130110
+* updated manuals
+* worked on pyevtx
+
+20130109
+* worked on pyevtx
+
+20130107
+* 2013 update
+* updated dependencies
+
+20121220
+* worked on formatted message strings
+* fixed for multi platform builds
+
+20121219
+* worked on formatted message strings
+
+20121218
+* worked on formatted message strings
+
+20121217
+* worked on formatted message strings
+
+20121214
+* worked on formatted message strings
+* evtxexport: added decimal event number
+
+20121213
+* worked on formatted message strings
+
+20121212
+* worked on formatted message strings
+
+20121125
+* worked on formatted message strings
+* evtxexport: detect double newlines and remove
+* updated dependencies
+
+20121122
+* pyevtx: code clean up
+
+20121119
+* worked on formatted message strings
+* updated libfwevt
+
+20121104
+* pyevtx: bug fixes
+* updated dependencies
+* code clean up
+
+20121031
+* worked on formatted message strings
+
+20121030
+* code clean up
+* worked on message string object
+* worked on formatted message strings
+
+20121029
+* worked on formatted message strings
+* code clean up
+
+20121028
+* worked on formatted message strings
+
+20121027
+* worked on formatted message strings
+
+20121025
+* added examples and tests directories
+* worked on user security identifier function
+
+20121022
+* worked on provider identifier support
+
+20121021
+* worked on provider identifier support
+* worked on libfwevt
+
+20121020
+* worked on provider identifier support
+
+20121019
+* worked on formatted message strings
+  - added support for case change in mui filename expansion
+* worked on libevtx
+  - added support for Binary
+  - added support for UserData
+
+20121018
+* worked on formatted message strings
+* bug fix in libcerror
+* bug fix in libcpath
+* bug fix handling %WinDir%
+* worked on pyevtx
+
+20121017
+* code clean up
+* worked on formatted message strings
+* updated libwrc
+
+20121016
+* changed default language
+* worked on pyevtx
+* worked on formatted message strings
+
+20121013
+* worked on evtxexport
+
+20121012
+* worked on evtxexport
+
+20120924
+* updated dependencies
+* libcdata update
+
+20120919
+* updated dependencies
+
+20120912
+* updated dependencies
+
+20120819
+* updated dependencies
+
+20120817
+* worked on python bindings
+  - added iterator
+
+20120816
+* worked on python bindings
+
+20120815
+* worked on library
+
+20120814
+* worked on python bindings
+* worked on tools
+
+20120805
+* updated dependencies
+
+20120718
+* updated dependencies
+* added libcstring, libfwevt
+* worked on libfwevt integration into libevtx
+* added support for empty element tag value
+
+20120501
+* updated dependencies
+* worked on text format export
+
+20120430
+* worked on record recovery
+* worked on text format export
+
+20120429
+* worked on split value support
+* worked on character and entity reference support
+
+20120428
+* updated dependencies
+* worked on PI support
+
+20120423
+* fixes for deployment
+
+20120422
+* libfvalue update
+* improvement for reading and converting to XML
+
+20120419
+* code clean up
+* improvements for distribution
+* improvements for non-debug build
+
+20120418
+* worked on libfvalue - format passing
+
+20120417
+* added libexe, libregf, libwrc, libcdirectory
+* updated libfdatetime
+* worked on libfvalue
+
+20120415
+* worked on libfvalue to copy to string functions
+* code now merges <File></File> to <File/>
+
+20120414
+* worked on API
+* worked on parsing binary XML
+  - added support for array types
+
+20120413
+* worked on evtxexport
+* worked on API
+
+20120410
+* worked on API
+
+20120409
+* updated dependencies
+* worked on storing XML tags and attributes
+
+20120312
+* worked on parsing binary XML
+
+20120311
+* worked on parsing binary XML
+
+20120310
+* worked on reading events
+
+20120307
+* worked on reading chunks
+* added CRC32 support
+
+20120306
+* 2012 update
+
+20111101
+* updated configure.ac and m4 files
+* updated spec and pc file
+* updated README files
+* updated common, libcstring, libsystem, libuna, libbfio, libfdatetime,
+  libfvalue
+* worked on windows codepage 932 and 936 support
+
+20110920
+* worked on initial version
+
+20110919
+* initial version based on libesedb 20110919
+

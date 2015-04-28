@@ -1,0 +1,36 @@
+Source: libevt
+Section: unknown
+Priority: extra
+Maintainer: Joachim Metz <joachim.metz@gmail.com>
+Build-Depends: debhelper (>= 7), autotools-dev, python-dev
+Standards-Version: 3.8.3
+Homepage: http://code.google.com/p/libevt/
+
+Package: libevt
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Library to access the Windows Event Log (EVT) format
+ libevt is a library to access the Windows Event Log (EVT) format.
+
+Package: libevt-dev
+Section: libdevel
+Architecture: any
+Depends: libevt (= ${Source-Version})
+Description: Header files and libraries for developing applications for libevt
+ Header files and libraries for developing applications for libevt.
+
+Package: libevt-tools
+Section: utils
+Architecture: any
+Depends: libevt (= ${Source-Version}), ${shlibs:Depends}
+Description: Several tools for reading Windows Event Log (EVT) files
+ Several tools for reading Windows Event Log (EVT) files.
+
+Package: libevt-python
+Section: python
+Architecture: any
+Depends: libevt (= ${Source-Version}), ${shlibs:Depends}, ${python:Depends}
+Description: Python bindings for libevt
+ Python bindings for libevt.
+

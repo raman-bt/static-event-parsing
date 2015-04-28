@@ -1,0 +1,73 @@
+/*
+ * Definitions for libevtx
+ *
+ * Copyright (c) 2011-2014, Joachim Metz <joachim.metz@gmail.com>
+ *
+ * Refer to AUTHORS for acknowledgements.
+ *
+ * This software is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#if !defined( _LIBEVTX_DEFINITIONS_H )
+#define _LIBEVTX_DEFINITIONS_H
+
+#include <libevtx/types.h>
+
+#define LIBEVTX_VERSION						20140317
+
+/* The version string
+ */
+#define LIBEVTX_VERSION_STRING					"20140317"
+
+/* The access flags definitions
+ * bit 1        set to 1 for read access
+ * bit 2        set to 1 for write access
+ * bit 3-8      not used
+ */
+enum LIBEVTX_ACCESS_FLAGS
+{
+	LIBEVTX_ACCESS_FLAG_READ				= 0x01,
+/* Reserved: not supported yet */
+	LIBEVTX_ACCESS_FLAG_WRITE				= 0x02
+};
+
+/* The file access macros
+ */
+#define LIBEVTX_OPEN_READ					( LIBEVTX_ACCESS_FLAG_READ )
+/* Reserved: not supported yet */
+#define LIBEVTX_OPEN_WRITE					( LIBEVTX_ACCESS_FLAG_WRITE )
+/* Reserved: not supported yet */
+#define LIBEVTX_OPEN_READ_WRITE					( LIBEVTX_ACCESS_FLAG_READ | LIBEVTX_ACCESS_FLAG_WRITE )
+
+/* The event level definitions
+ */
+enum LIBEVTX_EVENT_LEVELS
+{
+	LIBEVTX_EVENT_LEVEL_CRITICAL				= 1,
+	LIBEVTX_EVENT_LEVEL_ERROR				= 2,
+	LIBEVTX_EVENT_LEVEL_WARNING				= 3,
+	LIBEVTX_EVENT_LEVEL_INFORMATION				= 4,
+	LIBEVTX_EVENT_LEVEL_VERBOSE				= 5,
+};
+
+/* The event file flags
+ */
+enum LIBEVTX_FILE_FLAGS
+{
+	LIBEVTX_FILE_FLAG_IS_DIRTY				= 0x00000001UL,
+	LIBEVTX_FILE_FLAG_IS_FULL				= 0x00000002UL,
+};
+
+#endif
+
