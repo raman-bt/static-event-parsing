@@ -96,6 +96,7 @@ const char *export_handle_get_event_type(
  */
 int export_handle_initialize(
      export_handle_t **export_handle,
+	 FILE * outfile_handle,
      libcerror_error_t **error )
 {
 	static char *function = "export_handle_initialize";
@@ -179,7 +180,13 @@ int export_handle_initialize(
 	( *export_handle )->export_mode    = EXPORT_MODE_ITEMS;
 	( *export_handle )->event_log_type = EVTTOOLS_EVENT_LOG_TYPE_UNKNOWN;
 	( *export_handle )->ascii_codepage = LIBEVT_CODEPAGE_WINDOWS_1252;
-	( *export_handle )->notify_stream  = EXPORT_HANDLE_NOTIFY_STREAM;
+
+	if (NULL != outfile_handle) {
+		( *export_handle )->notify_stream  = outfile_handle;
+	}
+	else {
+		( *export_handle )->notify_stream  = EXPORT_HANDLE_NOTIFY_STREAM;
+	}
 
 	return( 1 );
 

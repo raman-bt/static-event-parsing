@@ -89,6 +89,7 @@ const char *export_handle_get_event_type(
 
 int export_handle_initialize(
      export_handle_t **export_handle,
+	 FILE * outfile_handle,
      libcerror_error_t **error );
 
 int export_handle_free(

@@ -31,6 +31,8 @@
 #include <stdlib.h>
 #endif
 
+#include "evtexport.h"
+
 #include "evtinput.h"
 #include "evtoutput.h"
 #include "evttools_libcerror.h"
@@ -45,114 +47,43 @@
 export_handle_t *evtexport_export_handle = NULL;
 int evtexport_abort                      = 0;
 
-/* Prints the executable usage information
+
+/**
+ * evtexport - API to export an evt file  (Windows XP or older)
+ *
+ * @param input a_source_filename full path of the event log tp be parsed
+ * @param input a_outfile handle to the output file. If null, the output is sent to console
+ * @param input a_options additional options affecting event parsing
+ *
+ * @returns 0 if success, -1 if error.
  */
-void usage_fprint(
-      FILE *stream )
+int evtexport(
+     const libcstring_system_character_t *a_source_filename,
+	 const FILE *a_outfile,
+	 const evtexport_options_t *a_options )
 {
-	if( stream == NULL )
-	{
-		return;
-	}
-	fprintf( stream, "Use evtexport to export items stored in a Windows Event\n"
-	                 "Log (EVT) file.\n\n" );
 
-	fprintf( stream, "Usage: evtexport [ -c codepage ] [ -l log_file ] [ -m mode ]\n"
-	                 "                 [ -p resource_files_path ] [ -r registy_files_path ]\n"
-	                 "                 [ -s system_file ] [ -S software_file ]\n"
-	                 "                 [ -t event_log_type ] [ -hvV ] source\n\n" );
-
-	fprintf( stream, "\tsource: the source file\n\n" );
-
-	fprintf( stream, "\t-c:     codepage of ASCII strings, options: ascii, windows-874,\n"
-	                 "\t        windows-932, windows-936, windows-949, windows-950,\n"
-	                 "\t        windows-1250, windows-1251, windows-1252 (default),\n"
-	                 "\t        windows-1253, windows-1254, windows-1255, windows-1256\n"
-	                 "\t        windows-1257 or windows-1258\n" );
-	fprintf( stream, "\t-h:     shows this help\n" );
-	fprintf( stream, "\t-l:     logs information about the exported items\n" );
-	fprintf( stream, "\t-m:     export mode, option: all, items (default), recovered\n"
-	                 "\t        'all' exports the (allocated) items and recovered items,\n"
-	                 "\t        'items' exports the (allocated) items and 'recovered' exports\n"
-	                 "\t        the recovered items\n" );
-	fprintf( stream, "\t-p:     search PATH for the resource files (default is the current\n"
-	                 "\t        working directory)\n" );
-	fprintf( stream, "\t-r:     name of the directory containing the SOFTWARE and SYSTEM\n"
-	                 "\t        (Windows) Registry file\n" );
-	fprintf( stream, "\t-s:     filename of the SYSTEM (Windows) Registry file.\n"
-	                 "\t        This option overrides the path provided by -r\n" );
-	fprintf( stream, "\t-S:     filename of the SOFTWARE (Windows) Registry file.\n"
-	                 "\t        This option overrides the path provided by -r\n" );
-	fprintf( stream, "\t-t:     event log type, options: application, security, system\n"
-	                 "\t        if not specified the event log type is determined based\n"
-	                 "\t        on the filename.\n" );
-	fprintf( stream, "\t-v:     verbose output to stderr\n" );
-	fprintf( stream, "\t-V:     print version\n" );
-}
-
-/* Signal handler for evtexport
- */
-void evtexport_signal_handler(
-      libcsystem_signal_t signal LIBCSYSTEM_ATTRIBUTE_UNUSED )
-{
-	libcerror_error_t *error = NULL;
-	static char *function    = "evtexport_signal_handler";
-
-	LIBCSYSTEM_UNREFERENCED_PARAMETER( signal )
-
-	evtexport_abort = 1;
-
-	if( evtexport_export_handle != NULL )
-	{
-		if( export_handle_signal_abort(
-		     evtexport_export_handle,
-		     &error ) != 1 )
-		{
-			libcnotify_printf(
-			 "%s: unable to signal export handle to abort.\n",
-			 function );
-
-			libcnotify_print_error_backtrace(
-			 error );
-			libcerror_error_free(
-			 &error );
-		}
-	}
-	/* Force stdin to close otherwise any function reading it will remain blocked
-	 */
-	if( libcsystem_file_io_close(
-	     0 ) != 0 )
-	{
-		libcnotify_printf(
-		 "%s: unable to close stdin.\n",
-		 function );
-	}
-}
-
-/* The main program
- */
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
-int wmain( int argc, wchar_t * const argv[] )
-#else
-int main( int argc, char * const argv[] )
-#endif
-{
 	libcerror_error_t *error                                         = NULL;
 	log_handle_t *log_handle                                         = NULL;
-	libcstring_system_character_t *option_ascii_codepage             = NULL;
-	libcstring_system_character_t *option_event_log_type             = NULL;
-	libcstring_system_character_t *option_export_mode                = NULL;
-	libcstring_system_character_t *option_log_filename               = NULL;
-	libcstring_system_character_t *option_resource_files_path        = NULL;
-	libcstring_system_character_t *option_preferred_language         = NULL;
-	libcstring_system_character_t *option_registry_directory_name    = NULL;
-	libcstring_system_character_t *option_software_registry_filename = NULL;
-	libcstring_system_character_t *option_system_registry_filename   = NULL;
-	libcstring_system_character_t *source                            = NULL;
-	char *program                                                    = "evtexport";
-	libcstring_system_integer_t option                               = 0;
+	char *program                                                     = "libevtexport";
 	int result                                                       = 0;
-	int verbose                                                      = 0;
+	FILE *outfile_handle											 = NULL;
+
+	if( NULL == a_source_filename )	// Make sure we have a source file
+	{
+		fprintf( 
+			stderr,
+			"Missing source file.\n" );
+		return -1;
+	}
+
+	if( NULL == a_options )			// Make sure we have the options spec
+	{
+		fprintf( 
+			stderr,
+			"Missing Options specification.\n" );
+		return -1;
+	}
 
 	libcnotify_stream_set(
 	 stderr,
@@ -184,103 +115,16 @@ int main( int argc, char * const argv[] )
 	 stdout,
 	 program );
 
-	while( ( option = libcsystem_getopt(
-	                   argc,
-	                   argv,
-	                   _LIBCSTRING_SYSTEM_STRING( "c:hl:m:p:r:s:S:t:vV" ) ) ) != (libcstring_system_integer_t) -1 )
-	{
-		switch( option )
-		{
-			case (libcstring_system_integer_t) '?':
-			default:
-				fprintf(
-				 stderr,
-				 "Invalid argument: %" PRIs_LIBCSTRING_SYSTEM "\n",
-				 argv[ optind - 1 ] );
-
-				usage_fprint(
-				 stdout );
-
-				return( EXIT_FAILURE );
-
-			case (libcstring_system_integer_t) 'c':
-				option_ascii_codepage = optarg;
-
-				break;
-
-			case (libcstring_system_integer_t) 'h':
-				usage_fprint(
-				 stdout );
-
-				return( EXIT_SUCCESS );
-
-			case (libcstring_system_integer_t) 'l':
-				option_log_filename = optarg;
-
-				break;
-
-			case (libcstring_system_integer_t) 'm':
-				option_export_mode = optarg;
-
-				break;
-
-			case (libcstring_system_integer_t) 'p':
-				option_resource_files_path = optarg;
-
-				break;
-
-			case (libcstring_system_integer_t) 'r':
-				option_registry_directory_name = optarg;
-
-				break;
-
-			case (libcstring_system_integer_t) 's':
-				option_system_registry_filename = optarg;
-
-				break;
-
-			case (libcstring_system_integer_t) 'S':
-				option_software_registry_filename = optarg;
-
-				break;
-
-			case (libcstring_system_integer_t) 't':
-				option_event_log_type = optarg;
-
-				break;
-
-			case (libcstring_system_integer_t) 'v':
-				verbose = 1;
-
-				break;
-
-			case (libcstring_system_integer_t) 'V':
-				evtoutput_copyright_fprint(
-				 stdout );
-
-				return( EXIT_SUCCESS );
-		}
-	}
-	if( optind == argc )
-	{
-		fprintf(
-		 stderr,
-		 "Missing source file.\n" );
-
-		usage_fprint(
-		 stdout );
-
-		return( EXIT_FAILURE );
-	}
-	source = argv[ optind ];
 
 	libcnotify_verbose_set(
-	 verbose );
+		a_options->option_verbose );
+
 	libevt_notify_set_stream(
-	 stderr,
-	 NULL );
+		stderr,					
+		NULL );
+
 	libevt_notify_set_verbose(
-	 verbose );
+		a_options->option_verbose );
 
 	if( log_handle_initialize(
 	     &log_handle,
@@ -292,8 +136,18 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
+
+	if (a_outfile)
+		fprintf( stderr, "evtexport: Writing output to given file....\n" );
+	else 
+		fprintf( stderr, "evtexport: Writing output to console....\n" );
+
+	// set the output stream to the given file if specified. If its null, the output handle will be set to stdout
+	outfile_handle = a_outfile;
+
 	if( export_handle_initialize(
 	     &evtexport_export_handle,
+		 outfile_handle,
 	     &error ) != 1 )
 	{
 		fprintf(
@@ -302,11 +156,11 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
-	if( option_ascii_codepage != NULL )
+	if( a_options->option_ascii_codepage != NULL )
 	{
 		result = export_handle_set_ascii_codepage(
 		          evtexport_export_handle,
-		          option_ascii_codepage,
+		          a_options->option_ascii_codepage,
 		          &error );
 
 		if( result == -1 )
@@ -324,11 +178,11 @@ int main( int argc, char * const argv[] )
 			 "Unsupported ASCII codepage defaulting to: windows-1252.\n" );
 		}
 	}
-	if( option_event_log_type != NULL )
+	if( a_options->option_event_log_type != NULL )
 	{
 		result = export_handle_set_event_log_type(
 		          evtexport_export_handle,
-		          option_event_log_type,
+		          a_options->option_event_log_type,
 		          &error );
 
 		if( result == -1 )
@@ -340,11 +194,11 @@ int main( int argc, char * const argv[] )
 			goto on_error;
 		}
 	}
-	if( option_export_mode != NULL )
+	if( a_options->option_export_mode != NULL )
 	{
 		result = export_handle_set_export_mode(
 			  evtexport_export_handle,
-			  option_export_mode,
+			  a_options->option_export_mode,
 			  &error );
 
 		if( result == -1 )
@@ -362,12 +216,12 @@ int main( int argc, char * const argv[] )
 			 "Unsupported export mode defaulting to: items.\n" );
 		}
 	}
-	if( ( option_event_log_type == NULL )
+	if( ( a_options->option_event_log_type == NULL )
 	 || ( result == 0 ) )
 	{
 		result = export_handle_set_event_log_type_from_filename(
 			  evtexport_export_handle,
-			  source,
+			  a_source_filename,
 			  &error );
 
 		if( result == -1 )
@@ -379,11 +233,11 @@ int main( int argc, char * const argv[] )
 			goto on_error;
 		}
 	}
-	if( option_resource_files_path != NULL )
+	if( a_options->option_resource_files_path != NULL )
 	{
 		if( export_handle_set_resource_files_path(
 		     evtexport_export_handle,
-		     option_resource_files_path,
+		     a_options->option_resource_files_path,
 		     &error ) != 1 )
 		{
 			fprintf(
@@ -393,11 +247,11 @@ int main( int argc, char * const argv[] )
 			goto on_error;
 		}
 	}
-	if( option_software_registry_filename != NULL )
+	if( a_options->option_software_registry_filename != NULL )
 	{
 		if( export_handle_set_software_registry_filename(
 		     evtexport_export_handle,
-		     option_software_registry_filename,
+		     a_options->option_software_registry_filename,
 		     &error ) != 1 )
 		{
 			fprintf(
@@ -407,11 +261,11 @@ int main( int argc, char * const argv[] )
 			goto on_error;
 		}
 	}
-	if( option_system_registry_filename != NULL )
+	if( a_options->option_system_registry_filename != NULL )
 	{
 		if( export_handle_set_system_registry_filename(
 		     evtexport_export_handle,
-		     option_system_registry_filename,
+		     a_options->option_system_registry_filename,
 		     &error ) != 1 )
 		{
 			fprintf(
@@ -421,11 +275,11 @@ int main( int argc, char * const argv[] )
 			goto on_error;
 		}
 	}
-	if( option_registry_directory_name != NULL )
+	if( a_options->option_registry_directory_name != NULL )
 	{
 		if( export_handle_set_registry_directory_name(
 		     evtexport_export_handle,
-		     option_registry_directory_name,
+		     a_options->option_registry_directory_name,
 		     &error ) != 1 )
 		{
 			fprintf(
@@ -435,7 +289,7 @@ int main( int argc, char * const argv[] )
 			goto on_error;
 		}
 	}
-	if( option_preferred_language != NULL )
+	if( a_options->option_preferred_language != NULL )
 	{
 /* TODO set preferred language identifier from input */
 		if( export_handle_set_preferred_language_identifier(
@@ -452,25 +306,25 @@ int main( int argc, char * const argv[] )
 	}
 	if( log_handle_open(
 	     log_handle,
-	     option_log_filename,
+	     a_options->option_log_filename,
 	     &error ) != 1 )
 	{
 		fprintf(
 		 stderr,
 		 "Unable to open log file: %" PRIs_LIBCSTRING_SYSTEM ".\n",
-		 option_log_filename );
+		 a_options->option_log_filename );
 
 		goto on_error;
 	}
 	if( export_handle_open_input(
 	     evtexport_export_handle,
-	     source,
+	     a_source_filename,
 	     &error ) != 1 )
 	{
 		fprintf(
 		 stderr,
 		 "Unable to open: %" PRIs_LIBCSTRING_SYSTEM ".\n",
-		 source );
+		 a_source_filename );
 
 		goto on_error;
 	}
@@ -556,5 +410,5 @@ on_error:
 		 NULL );
 	}
 	return( EXIT_FAILURE );
-}
 
+}
