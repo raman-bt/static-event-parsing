@@ -34,7 +34,7 @@
 #include "evtexport.h"
 
 //#include "evtinput.h"
-//#include "evtoutput.h"
+#include "evtoutput.h"
 //#include "evttools_libcerror.h"
 //#include "evttools_libclocale.h"
 //#include "evttools_libcnotify.h"
@@ -262,13 +262,12 @@ int main( int argc, char * const argv[] )
 
 				break;
 
-			/***
+			
 			case (libcstring_system_integer_t) 'V':
 				evtoutput_copyright_fprint(
 				 stdout );
 
 				return( EXIT_SUCCESS );
-			***/
 		}
 	}
 	if( optind == argc )
