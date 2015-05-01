@@ -142,23 +142,13 @@ int wmain( int argc, wchar_t * const argv[] )
 int main( int argc, char * const argv[] )
 #endif
 {
-	libcerror_error_t *error                                         = NULL;
-	//log_handle_t *log_handle                                         = NULL;
-	//libcstring_system_character_t *option_ascii_codepage             = NULL;
-	//libcstring_system_character_t *option_event_log_type             = NULL;
-	//libcstring_system_character_t *option_export_mode                = NULL;
-	//libcstring_system_character_t *option_log_filename               = NULL;
-	//libcstring_system_character_t *option_resource_files_path        = NULL;
-	//libcstring_system_character_t *option_preferred_language         = NULL;
-	//libcstring_system_character_t *option_registry_directory_name    = NULL;
-	//libcstring_system_character_t *option_software_registry_filename = NULL;
-	//libcstring_system_character_t *option_system_registry_filename   = NULL;
-	libcstring_system_character_t *output_filename						= NULL;
-	libcstring_system_character_t *source								= NULL;
-	libcstring_system_integer_t option                               = 0;
-	int result                                                       = 0;
-	int verbose                                                      = 0;
-	FILE * outfile                                                   = NULL;
+	libcerror_error_t *error                                        = NULL;
+	libcstring_system_character_t *output_filename					= NULL;
+	libcstring_system_character_t *source							= NULL;
+	libcstring_system_integer_t option                              = 0;
+	int result														= 0;
+	int verbose                                                     = 0;
+	FILE * outfile                                                  = NULL;
 
 	// allocate options structure
 	evtexport_options_t *pOptions =  memory_allocate_structure(evtexport_options_t);
@@ -283,280 +273,17 @@ int main( int argc, char * const argv[] )
 	}
 	source = argv[ optind ];
 
-	//libcnotify_verbose_set(
-	// verbose );
-	//libevt_notify_set_stream(
-	// stderr,
-	// NULL );
-	//libevt_notify_set_verbose(
-	// verbose );
 
-//	if( log_handle_initialize(
-//	     &log_handle,
-//	     &error ) != 1 )
-//	{
-//		fprintf(
-//		 stderr,
-//		 "Unable to initialize log handle.\n" );
-//
-//		goto on_error;
-//	}
-//	if( export_handle_initialize(
-//	     &evtexport_export_handle,
-//	     &error ) != 1 )
-//	{
-//		fprintf(
-//		 stderr,
-//		 "Unable to initialize export handle.\n" );
-//
-//		goto on_error;
-//	}
-//	if( option_ascii_codepage != NULL )
-//	{
-//		result = export_handle_set_ascii_codepage(
-//		          evtexport_export_handle,
-//		          option_ascii_codepage,
-//		          &error );
-//
-//		if( result == -1 )
-//		{
-//			fprintf(
-//			 stderr,
-//			 "Unable to set ASCII codepage in export handle.\n" );
-//
-//			goto on_error;
-//		}
-//		else if( result == 0 )
-//		{
-//			fprintf(
-//			 stderr,
-//			 "Unsupported ASCII codepage defaulting to: windows-1252.\n" );
-//		}
-//	}
-//	if( option_event_log_type != NULL )
-//	{
-//		result = export_handle_set_event_log_type(
-//		          evtexport_export_handle,
-//		          option_event_log_type,
-//		          &error );
-//
-//		if( result == -1 )
-//		{
-//			fprintf(
-//			 stderr,
-//			 "Unable to set event log type in export handle.\n" );
-//
-//			goto on_error;
-//		}
-//	}
-//	if( option_export_mode != NULL )
-//	{
-//		result = export_handle_set_export_mode(
-//			  evtexport_export_handle,
-//			  option_export_mode,
-//			  &error );
-//
-//		if( result == -1 )
-//		{
-//			fprintf(
-//			 stderr,
-//			 "Unable to set export mode.\n" );
-//
-//			goto on_error;
-//		}
-//		else if( result == 0 )
-//		{
-//			fprintf(
-//			 stderr,
-//			 "Unsupported export mode defaulting to: items.\n" );
-//		}
-//	}
-//	if( ( option_event_log_type == NULL )
-//	 || ( result == 0 ) )
-//	{
-//		result = export_handle_set_event_log_type_from_filename(
-//			  evtexport_export_handle,
-//			  source,
-//			  &error );
-//
-//		if( result == -1 )
-//		{
-//			fprintf(
-//			 stderr,
-//			 "Unable to set event log type from filename in export handle.\n" );
-//
-//			goto on_error;
-//		}
-//	}
-//	if( option_resource_files_path != NULL )
-//	{
-//		if( export_handle_set_resource_files_path(
-//		     evtexport_export_handle,
-//		     option_resource_files_path,
-//		     &error ) != 1 )
-//		{
-//			fprintf(
-//			 stderr,
-//			 "Unable to set resource files path in export handle.\n" );
-//
-//			goto on_error;
-//		}
-//	}
-//	if( option_software_registry_filename != NULL )
-//	{
-//		if( export_handle_set_software_registry_filename(
-//		     evtexport_export_handle,
-//		     option_software_registry_filename,
-//		     &error ) != 1 )
-//		{
-//			fprintf(
-//			 stderr,
-//			 "Unable to set software registry filename in export handle.\n" );
-//
-//			goto on_error;
-//		}
-//	}
-//	if( option_system_registry_filename != NULL )
-//	{
-//		if( export_handle_set_system_registry_filename(
-//		     evtexport_export_handle,
-//		     option_system_registry_filename,
-//		     &error ) != 1 )
-//		{
-//			fprintf(
-//			 stderr,
-//			 "Unable to set system registry filename in export handle.\n" );
-//
-//			goto on_error;
-//		}
-//	}
-//	if( option_registry_directory_name != NULL )
-//	{
-//		if( export_handle_set_registry_directory_name(
-//		     evtexport_export_handle,
-//		     option_registry_directory_name,
-//		     &error ) != 1 )
-//		{
-//			fprintf(
-//			 stderr,
-//			 "Unable to set registry directory name in export handle.\n" );
-//
-//			goto on_error;
-//		}
-//	}
-//	if( option_preferred_language != NULL )
-//	{
-///* TODO set preferred language identifier from input */
-//		if( export_handle_set_preferred_language_identifier(
-//		     evtexport_export_handle,
-//		     0x0409,
-//		     &error ) != 1 )
-//		{
-//			fprintf(
-//			 stderr,
-//			 "Unable to set preferred language identifier in export handle.\n" );
-//
-//			goto on_error;
-//		}
-//	}
-
-
-	/*if( log_handle_open(
-	     log_handle,
-	     option_log_filename,
-	     &error ) != 1 )
-	{
-		fprintf(
-		 stderr,
-		 "Unable to open log file: %" PRIs_LIBCSTRING_SYSTEM ".\n",
-		 option_log_filename );
-
-		goto on_error;
-	}
-	if( export_handle_open_input(
-	     evtexport_export_handle,
-	     source,
-	     &error ) != 1 )
-	{
-		fprintf(
-		 stderr,
-		 "Unable to open: %" PRIs_LIBCSTRING_SYSTEM ".\n",
-		 source );
-
-		goto on_error;
-	}
-	result = export_handle_export_file(
-	          evtexport_export_handle,
-	          log_handle,
-	          &error );
-
-	if( result == -1 )
-	{
-		fprintf(
-		 stderr,
-		 "Unable to export file.\n" );
-
-		goto on_error;
-	}
-	if( export_handle_close_input(
-	     evtexport_export_handle,
-	     &error ) != 0 )
-	{
-		fprintf(
-		 stderr,
-		 "Unable to close export handle.\n" );
-
-		goto on_error;
-	}
-	if( export_handle_free(
-	     &evtexport_export_handle,
-	     &error ) != 1 )
-	{
-		fprintf(
-		 stderr,
-		 "Unable to free export handle.\n" );
-
-		goto on_error;
-	}
-	if( log_handle_close(
-	     log_handle,
-	     &error ) != 0 )
-	{
-		fprintf(
-		 stderr,
-		 "Unable to close log handle.\n" );
-
-		goto on_error;
-	}
-	if( log_handle_free(
-	     &log_handle,
-	     &error ) != 1 )
-	{
-		fprintf(
-		 stderr,
-		 "Unable to free log handle.\n" );
-
-		goto on_error;
-	}
-	if( result == 0 )
-	{
-		fprintf(
-		 stdout,
-		 "No records to export.\n" );
-	}
-	return( EXIT_SUCCESS );
- */
-
- // create/open outfile if one is specified
- if (NULL != output_filename) {
+	// create/open outfile if one is specified
+	if (NULL != output_filename) {
 
 	 fprintf(
 			stderr,
-			"evtexportapp: output file name is : %ls .\n", output_filename );
+			"evtexportapp: output file name is : %" PRIs_LIBCSTRING_SYSTEM "\n", output_filename );
 
 	#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
 		// fopen() cannot handle wide filenames
-	    outfile = _wfopen(output_filename, L"w+");
+		outfile = _wfopen(output_filename, L"w+");
 	#else
 		outfile = fopen(output_filename, "w+");
 	#endif
@@ -567,17 +294,17 @@ int main( int argc, char * const argv[] )
 			"evtexportapp: failed to create output file: %s .\n", output_filename );
 		goto on_error;
 	}
- }
- else {	
+	}
+	else {	
 	outfile = NULL;
- }
+	}
 
- // use the api to export the evt log
- result = evtexport(
-     source,
-	 outfile,
-	 pOptions
-  );
+	// use the api to export the evt log
+	result = evtexport(
+		source,
+		outfile,
+		pOptions
+	);
 
  if (NULL != output_filename) {
 	 fclose(outfile);

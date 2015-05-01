@@ -44,8 +44,7 @@
 #include "export_handle.h"
 #include "log_handle.h"
 
-export_handle_t *evtexport_export_handle = NULL;
-int evtexport_abort                      = 0;
+
 
 
 /**
@@ -62,12 +61,12 @@ int evtexport(
 	 const FILE *a_outfile,
 	 const evtexport_options_t *a_options )
 {
-
-	libcerror_error_t *error                                         = NULL;
-	log_handle_t *log_handle                                         = NULL;
-	char *program                                                     = "libevtexport";
-	int result                                                       = 0;
-	FILE *outfile_handle											 = NULL;
+	export_handle_t *evtexport_export_handle			= NULL;
+	libcerror_error_t *error                            = NULL;
+	log_handle_t *log_handle                            = NULL;
+	char *program                                       = "libevtexport";
+	int result                                          = 0;
+	FILE *outfile_handle								= NULL;
 
 	if( NULL == a_source_filename )	// Make sure we have a source file
 	{
@@ -111,6 +110,7 @@ int evtexport(
 
 		goto on_error;
 	}
+
 	evtoutput_version_fprint(
 	 stdout,
 	 program );
@@ -387,7 +387,7 @@ int evtexport(
 		 stdout,
 		 "No records to export.\n" );
 	}
-	return( EXIT_SUCCESS );
+	return( 0 );
 
 on_error:
 	if( error != NULL )
@@ -409,6 +409,6 @@ on_error:
 		 &log_handle,
 		 NULL );
 	}
-	return( EXIT_FAILURE );
+	return( -1 );
 
 }
