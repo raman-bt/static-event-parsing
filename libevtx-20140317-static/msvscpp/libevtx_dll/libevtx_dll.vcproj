@@ -230,6 +230,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\evtxtools\evtxexport.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\libevtx\libevtx_byte_stream.h"
 				>
 			</File>
